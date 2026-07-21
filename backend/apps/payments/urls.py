@@ -1,3 +1,7 @@
 from django.urls import path
-
-urlpatterns = []
+from .views import PaymentsAPIView
+urlpatterns = [
+    path("",PaymentsAPIView.as_view(),name="payment"),
+    
+    
+]
