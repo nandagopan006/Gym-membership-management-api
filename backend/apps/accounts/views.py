@@ -1,8 +1,8 @@
 from django.shortcuts import render
-from .serializers import SignupSerializer,LoginSerializer
+from .serializers import SignupSerializer,LoginSerializer,ProfileSerializer
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
-
+from rest_framework.permissions import IsAuthenticated
 
 from rest_framework.views import APIView
 
@@ -44,3 +44,12 @@ class LoginAPIView(APIView):
         )
             
         
+class ProfileAPIView(APIView):
+    
+    permission_classes=[IsAuthenticated]
+    
+    def get(self,request):
+        
+        serializer=ProfileSerializer(request.user)
+        
+        return Response(serializer.data,status=200)
