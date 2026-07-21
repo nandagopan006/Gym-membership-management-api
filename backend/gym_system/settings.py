@@ -134,6 +134,9 @@ REST_FRAMEWORK = {
     ),
 }
 
-# Custom User Model
-# AUTH_USER_MODEL = 'users.User' # Uncomment when the User model is created
+#Custom User Model
+AUTH_USER_MODEL = 'users.User' 
+AUTHENTICATION_BACKENDS = [
+    "django.contrib.auth.backends.ModelBackend",
+]
 
