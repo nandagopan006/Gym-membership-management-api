@@ -27,8 +27,6 @@ class Payment(models.Model):
         default="PENDING"
     )
 
-    payment_date = models.DateField()
-
     created_at = models.DateTimeField(
         auto_now_add=True
     )
