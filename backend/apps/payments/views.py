@@ -42,11 +42,17 @@ class PaymentStatusAPIView(APIView):
         return Response(serializer.data,status=200)
 
 class OwnerPaymentListAPIView(APIView):
-    permission_classes=[IsAuthenticated,IsOwner]
+    permission_classes=[IsAuthenticated, IsOwner]
     
     def get(self,request):
         
+        status_filter=request.query_params.get("status")
+        
         payments=Payment.objects.all()
+        
+        if status_filter :
+            payments=payments.filter(status=status_filter)
+            
         serializer=PaymentsSerializer(payments,many=True)
         
         return Response(serializer.data,status=200)
