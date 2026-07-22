@@ -4,10 +4,10 @@ from rest_framework.permissions import IsAuthenticated
 from .serializers import  PaymentsSerializer,PaymentCreateSerializer,OwnerPaymentUpdateSerializer
 from .models import Payment
 from django.shortcuts import get_object_or_404
-from apps.users.permissions import IsOwner
+from apps.users.permissions import IsOwner,IsMember
 
 class PaymentCreateAPIView(APIView):
-    permission_classes=[IsAuthenticated]
+    permission_classes=[IsAuthenticated,IsMember]
     
     def post(self,request):
         
@@ -23,7 +23,7 @@ class PaymentCreateAPIView(APIView):
         return Response(serializer.errors,status=400)
 
 class PaymentsAPIView(APIView):
-    permission_classes=[IsAuthenticated]
+    permission_classes=[IsAuthenticated,IsMember]
     
     def get(self,request):
         
@@ -35,7 +35,7 @@ class PaymentsAPIView(APIView):
     
 
 class PaymentStatusAPIView(APIView):
-    permission_classes=[IsAuthenticated]
+    permission_classes=[IsAuthenticated,IsMember]
     
     def get(self,request,id):
         

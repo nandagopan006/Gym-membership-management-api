@@ -6,3 +6,8 @@ class IsOwner(BasePermission):
         
         return request.user.role == "OWNER"
     
+class IsMember(BasePermission):
+    
+    def has_permission(self, request, view):
+        
+        return request.user.role == "MEMBER"
