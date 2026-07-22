@@ -50,3 +50,19 @@ class OwnerPaymentListAPIView(APIView):
         serializer=PaymentsSerializer(payments,many=True)
         
         return Response(serializer.data,status=200)
+    
+class OwnerPaymentUpdateAPIView(APIView):
+    permission_classes=[IsAuthenticated,IsOwner]
+    
+    def patch(self,request,id):
+        
+        payment=get_object_or_404(Payment,id=id)
+        serializer=PaymentsSerializer(payment,data=request.data,partial=True)
+        
+        if serializer.is_valid():
+            
+            serializer.save()
+            
+            return Response(serializer.data,status=200)
+        
+        return Response(serializer.errors,status=400)
