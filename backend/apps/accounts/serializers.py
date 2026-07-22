@@ -50,3 +50,12 @@ class ProfileSerializer(serializers.ModelSerializer):
             "created_at",
             ]
         
+
+class MessageSerializer(serializers.Serializer):
+    message = serializers.CharField()
+
+
+class LoginResponseSerializer(serializers.Serializer):
+    message = serializers.CharField()
+    access = serializers.CharField()
+    refresh = serializers.CharField()

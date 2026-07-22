@@ -5,10 +5,14 @@ from .serializers import  PaymentsSerializer,PaymentCreateSerializer,OwnerPaymen
 from .models import Payment
 from django.shortcuts import get_object_or_404
 from apps.users.permissions import IsOwner,IsMember
+from drf_spectacular.utils import extend_schema
+from apps.accounts.serializers import MessageSerializer
 
 class PaymentCreateAPIView(APIView):
     permission_classes=[IsAuthenticated,IsMember]
     
+    @extend_schema(
+        request=PaymentCreateSerializer, responses={201: MessageSerializer, 400: dict},)
     def post(self,request):
         
         serializer=PaymentCreateSerializer(data=request.data)
@@ -25,6 +29,9 @@ class PaymentCreateAPIView(APIView):
 class PaymentsAPIView(APIView):
     permission_classes=[IsAuthenticated,IsMember]
     
+    @extend_schema(
+       responses={200: PaymentsSerializer(many=True), 401: dict, 403: dict, 404: dict}
+    )
     def get(self,request):
         
         payments=Payment.objects.filter(user=request.user)
@@ -37,6 +44,9 @@ class PaymentsAPIView(APIView):
 class PaymentStatusAPIView(APIView):
     permission_classes=[IsAuthenticated,IsMember]
     
+    @extend_schema(
+        responses={200: PaymentsSerializer, 401: dict, 403: dict, 404: dict},)
+    
     def get(self,request,id):
         
         payment=get_object_or_404(Payment,id=id,user=request.user)
@@ -47,6 +57,8 @@ class PaymentStatusAPIView(APIView):
 
 class OwnerPaymentListAPIView(APIView):
     permission_classes=[IsAuthenticated, IsOwner]
+    
+    @extend_schema(responses={200: PaymentsSerializer(many=True), 401: dict, 403: dict, 404: dict})
     
     def get(self,request):
         
@@ -63,6 +75,9 @@ class OwnerPaymentListAPIView(APIView):
     
 class OwnerPaymentUpdateAPIView(APIView):
     permission_classes=[IsAuthenticated,IsOwner]
+    
+    @extend_schema(
+        request=OwnerPaymentUpdateSerializer, responses={200: OwnerPaymentUpdateSerializer, 400: dict},)
     
     def patch(self,request,id):
             
