@@ -3,6 +3,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from .serializers import  PaymentsSerializer
 from .models import Payment
+from django.shortcuts import get_object_or_404
 
 class PaymentsAPIView(APIView):
     permission_classes=[IsAuthenticated]
@@ -28,5 +29,14 @@ class PaymentsAPIView(APIView):
         
         return Response(serializer.data,status=200)
     
+class PaymentStatusAPIView(APIView):
+    permission_classes=[IsAuthenticated]
     
+    def get(self,request,id):
+        
+        payment=get_object_or_404(Payment,id=id,user=request.user)
+        
+        serializer=PaymentsSerializer(payment)
+        
+        return Response(serializer.data,status=200)
     
