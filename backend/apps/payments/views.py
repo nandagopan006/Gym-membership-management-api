@@ -4,6 +4,7 @@ from rest_framework.permissions import IsAuthenticated
 from .serializers import  PaymentsSerializer
 from .models import Payment
 from django.shortcuts import get_object_or_404
+from apps.users.permissions import IsOwner
 
 class PaymentsAPIView(APIView):
     permission_classes=[IsAuthenticated]
@@ -39,4 +40,13 @@ class PaymentStatusAPIView(APIView):
         serializer=PaymentsSerializer(payment)
         
         return Response(serializer.data,status=200)
+
+class OwnerPaymentListAPIView(APIView):
+    permission_classes=[IsAuthenticated,IsOwner]
     
+    def get(self,request):
+        
+        payments=Payment.objects.all()
+        serializer=PaymentsSerializer(payments,many=True)
+        
+        return Response(serializer.data,status=200)
